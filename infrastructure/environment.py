@@ -8,8 +8,15 @@ class MongoSettings(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="mongo_", extra="ignore")
 
 
+class RedisSettings(BaseSettings):
+    uri: str
+
+    model_config = SettingsConfigDict(env_prefix="redis_", extra="ignore")
+
+
 class Environment(BaseSettings):
     mongodb: MongoSettings = MongoSettings()
+    redis: RedisSettings = RedisSettings()
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

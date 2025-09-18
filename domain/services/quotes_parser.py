@@ -6,13 +6,12 @@ from domain.models.quote import Quote
 
 class QuotesParserService:
 
-    async def parse(self, soup: BeautifulSoup) -> list[Quote]:
+    def parse(self, soup: BeautifulSoup) -> list[Quote]:
         quotes: list = soup.find_all(class_='quote')
         result: list[Quote] = []
         for quote in quotes:
             parsed_quote: Quote = self._parse_quote(quote)
             result.append(parsed_quote)
-            print(f"Quote: {parsed_quote}")
         return result
 
     def _parse_quote(self, quote_html: BeautifulSoup) -> Quote:

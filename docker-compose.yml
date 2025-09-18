@@ -17,7 +17,7 @@ services:
       - "8000:8000"
     depends_on:
       - mongo
-
+      - redis
   mongo:
     image: mongo:8.0
     container_name: mongodb
@@ -29,7 +29,32 @@ services:
     volumes:
       - mongo_data:/data/db
       - mongo_config:/data/configdb
+  redis:
+    image: redis:8.2.1
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  celery:
+    build: .
+    command: [ "celery", "-A", "infrastructure.celery_cfg", "worker", "--loglevel", "INFO" ]
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - .venv
+        - action: rebuild
+          path: ./uv.lock
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - redis
 
 volumes:
   mongo_data:
   mongo_config:
+  redis_data:
