@@ -1,1 +1,0 @@
-QUOTAS_SITE_URL: str = 'https://quotes.toscrape.com/'
