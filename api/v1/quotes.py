@@ -5,6 +5,7 @@ from fastapi.params import Query
 
 from application.controllers.quotes import QuotesController, parse_task
 from application.dto.request import GetQuotesQueryDTO
+from application.dto.response import QuotesFromDBResponseDTO
 from infrastructure.constants import QUOTES_PARSING_REQUEST_LIMIT
 from infrastructure.fastapi_cfg import limiter
 
@@ -12,7 +13,7 @@ router = APIRouter(prefix="")
 
 
 @router.get('/quotes')
-async def get_quotes_from_db(filter_params: Annotated[GetQuotesQueryDTO, Query()]):
+async def get_quotes_from_db(filter_params: Annotated[GetQuotesQueryDTO, Query()]) -> QuotesFromDBResponseDTO:
     """Get parsed quotes from database by filter parameters.
 
     Args:
