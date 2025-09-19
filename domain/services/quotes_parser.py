@@ -1,12 +1,27 @@
+import logging
+
 from bs4 import BeautifulSoup, Tag
 from bs4.element import PageElement, NavigableString
 
 from domain.models.quote import Quote
 
+logger = logging.getLogger(__name__)
+
 
 class QuotesParserService:
+    """Service for parsing quotes from site: https://quotes.toscrape.com/"""
 
     def parse(self, soup: BeautifulSoup) -> list[Quote]:
+        """Main parsing method
+
+        Find all quotes on page, and parse them to list. If Quote attribute is unknow, it will be ignored
+
+        Attributes:
+             soup (BeautifulSoup): BeautifulSoup object of HTML page
+
+        Returns:
+            list[Quote]: list of Quote objects
+        """
         quotes: list = soup.find_all(class_='quote')
         result: list[Quote] = []
         for quote in quotes:
@@ -25,4 +40,4 @@ class QuotesParserService:
         try:
             return element.text
         except AttributeError:
-            print(f'Спарсить часть цитаты не получилось!')
+            logger.warning('Part of quote can\'t be parsed!')

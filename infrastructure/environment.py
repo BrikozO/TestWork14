@@ -16,6 +16,7 @@ class RedisSettings(BaseSettings):
 
 
 class Environment(BaseSettings):
+    debug: bool
     mongodb: MongoSettings = MongoSettings()
     redis: RedisSettings = RedisSettings()
 
