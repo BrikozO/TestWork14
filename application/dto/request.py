@@ -2,9 +2,9 @@ from pydantic import BaseModel, Field
 
 
 class GetQuotesQueryDTO(BaseModel):
-    model_config = {"extra": "forbid"}
+    model_config = {'extra': 'forbid'}
 
-    author: str = ""
+    author: str = ''
     tags: list[str] = Field(default_factory=list)
 
     @property

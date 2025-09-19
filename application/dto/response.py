@@ -6,7 +6,7 @@ from domain.models.quote import Quote
 
 class QuotesFromDBResponseDTO(BaseModel):
     quotes: list[Quote]
-    filt: GetQuotesQueryDTO = Field(alias="filter")
+    filt: GetQuotesQueryDTO = Field(alias='filter')
 
     @computed_field
     @property
