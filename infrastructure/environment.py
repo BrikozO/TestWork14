@@ -4,6 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class MongoSettings(BaseSettings):
     uri: str
     db: str
+    quotes_collection: str
 
     model_config = SettingsConfigDict(env_prefix="mongo_", extra="ignore")
 
