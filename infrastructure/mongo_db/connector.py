@@ -14,15 +14,15 @@ class MongoDBConnector:
         self._lock = threading.Lock()
 
     def get_sync_connection(self):
-        if not self._sync_db_client:
+        if self._sync_db_client is None:
             with self._lock:
-                if not self._sync_db_client:
+                if self._sync_db_client is None:
                     _connector = pymongo.MongoClient(env.mongodb.uri)
                     self._sync_db_client = _connector[self._db_name]
         return self._sync_db_client
 
     async def get_async_connection(self):
-        if not self._async_db_client:
+        if self._async_db_client is None:
             _connector_async = pymongo.AsyncMongoClient(env.mongodb.uri)
             self._async_db_client = _connector_async[self._db_name]
         return self._async_db_client

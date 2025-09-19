@@ -38,7 +38,16 @@ services:
       - redis_data:/data
   celery:
     build: .
-    command: [ "watchmedo", "auto-restart","--directory", "/app", "--pattern", "*.py", "--recursive", "--", "celery", "-A", "infrastructure.celery_cfg", "worker", "--loglevel", "INFO" ]
+    command: [
+      "watchmedo", "auto-restart",
+      "--directory", "/app",
+      "--pattern", "*.py",
+      "--recursive",
+      "--ignore-patterns", "*.pyc;__pycache__/*",
+      "--interval", "2.0",
+      "--",
+      "bash", "-c", "sleep 2 && celery -A infrastructure.celery_cfg worker --loglevel=INFO"
+    ]
     develop:
       watch:
         - action: sync
