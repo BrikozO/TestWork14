@@ -1,0 +1,70 @@
+services:
+  webapi:
+    build: .
+    command: [ "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload" ]
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - .venv
+        - action: rebuild
+          path: ./uv.lock
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mongo
+      - redis
+  mongo:
+    image: mongo:8.0
+    container_name: mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    env_file:
+      - .env
+    volumes:
+      - mongo_data:/data/db
+      - mongo_config:/data/configdb
+  redis:
+    image: redis:8.2.1
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+  celery:
+    build: .
+    command: [ "watchmedo", "auto-restart","--directory", "/app", "--pattern", "*.py", "--recursive", "--", "celery", "-A", "infrastructure.celery_cfg", "worker", "--loglevel", "INFO" ]
+    develop:
+      watch:
+        - action: sync
+          path: ./
+          target: /app
+          ignore:
+            - .venv
+        - action: rebuild
+          path: ./uv.lock
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+      - redis
+  flower:
+    build: .
+    command: [ "celery", "-A", "infrastructure.celery_cfg", "flower", "--host=0.0.0.0", "--port=5555" ]
+    env_file:
+      - .env
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - celery
+
+volumes:
+  mongo_data:
+  mongo_config:
+  redis_data:
