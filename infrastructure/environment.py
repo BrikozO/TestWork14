@@ -6,13 +6,13 @@ class MongoSettings(BaseSettings):
     db: str
     quotes_collection: str
 
-    model_config = SettingsConfigDict(env_prefix="mongo_", extra="ignore")
+    model_config = SettingsConfigDict(env_prefix='mongo_', extra='ignore')
 
 
 class RedisSettings(BaseSettings):
     uri: str
 
-    model_config = SettingsConfigDict(env_prefix="redis_", extra="ignore")
+    model_config = SettingsConfigDict(env_prefix='redis_', extra='ignore')
 
 
 class Environment(BaseSettings):
@@ -20,7 +20,7 @@ class Environment(BaseSettings):
     mongodb: MongoSettings = MongoSettings()
     redis: RedisSettings = RedisSettings()
 
-    model_config = SettingsConfigDict(env_file=".env", extra="ignore")
+    model_config = SettingsConfigDict(env_file='.env', extra='ignore')
 
 
 env: Environment = Environment()

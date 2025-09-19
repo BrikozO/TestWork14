@@ -21,14 +21,13 @@ class AsyncQuotesRepository:
     async def insert_batch(self, quotes: list[Quote]):
         try:
             await self._conn.insert_many([asdict(quote) for quote in quotes], ordered=False)
-            logging.info(f"Inserted {len(quotes)} quotes")
+            logging.info(f'Inserted {len(quotes)} quotes')
         except BulkWriteError as e:
             inserted_count = e.details.get('nInserted', 0)
             duplicate_errors = [
-                error for error in e.details.get('writeErrors', [])
-                if error.get('code') == self._DUPLICATE_ERROR_CODE
+                error for error in e.details.get('writeErrors', []) if error.get('code') == self._DUPLICATE_ERROR_CODE
             ]
-            logger.info(f"Inserted {inserted_count} quotes and ignored {len(duplicate_errors)} duplicates")
+            logger.info(f'Inserted {inserted_count} quotes and ignored {len(duplicate_errors)} duplicates')
 
     async def all(self) -> list[Quote]:
         result: list[Quote] = []
@@ -62,11 +61,10 @@ class SyncQuotesRepository:
     def insert_batch(self, quotes: list[Quote]):
         try:
             self._conn.insert_many([asdict(quote) for quote in quotes], ordered=False)
-            logging.info(f"Inserted {len(quotes)} quotes")
+            logging.info(f'Inserted {len(quotes)} quotes')
         except BulkWriteError as e:
             inserted_count = e.details.get('nInserted', 0)
             duplicate_errors = [
-                error for error in e.details.get('writeErrors', [])
-                if error.get('code') == self._DUPLICATE_ERROR_CODE
+                error for error in e.details.get('writeErrors', []) if error.get('code') == self._DUPLICATE_ERROR_CODE
             ]
-            logger.info(f"Inserted {inserted_count} quotes and ignored {len(duplicate_errors)} duplicates")
+            logger.info(f'Inserted {inserted_count} quotes and ignored {len(duplicate_errors)} duplicates')

@@ -1,7 +1,7 @@
 import logging
 
 from bs4 import BeautifulSoup, Tag
-from bs4.element import PageElement, NavigableString
+from bs4.element import NavigableString, PageElement
 
 from domain.models.quote import Quote
 
@@ -40,4 +40,4 @@ class QuotesParserService:
         try:
             return element.text
         except AttributeError:
-            logger.warning('Part of quote can\'t be parsed!')
+            logger.warning("Part of quote can't be parsed!")

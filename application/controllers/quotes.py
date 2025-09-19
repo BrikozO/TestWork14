@@ -13,18 +13,18 @@ from infrastructure.constants import QUOTES_SITE_URL
 from infrastructure.environment import env
 from infrastructure.http_client import http_client
 from infrastructure.mongo_db.connector import conn
-from infrastructure.mongo_db.quotes_repository import SyncQuotesRepository, AsyncQuotesRepository
+from infrastructure.mongo_db.quotes_repository import AsyncQuotesRepository, SyncQuotesRepository
 
 logger = getLogger(__name__)
 
 
 class QuotesController:
-
     @staticmethod
     async def get_quotes_from_db(filter_: GetQuotesQueryDTO) -> QuotesFromDBResponseDTO:
         mongo_client = await conn.get_async_connection()
-        repo: AsyncQuotesRepository = AsyncQuotesRepository(client=mongo_client,
-                                                            collection=env.mongodb.quotes_collection)
+        repo: AsyncQuotesRepository = AsyncQuotesRepository(
+            client=mongo_client, collection=env.mongodb.quotes_collection
+        )
         if filter_.empty:
             logger.info('Get all quotes from db (empty filter)')
             quotes: list[Quote] = await repo.all()
@@ -51,9 +51,9 @@ class QuotesController:
 
             next_page = QuotesController._try_to_get_next_page_link(soup)
         if result:
-            SyncQuotesRepository(client=conn.get_sync_connection(),
-                                 collection=env.mongodb.quotes_collection).insert_batch(
-                result)
+            SyncQuotesRepository(
+                client=conn.get_sync_connection(), collection=env.mongodb.quotes_collection
+            ).insert_batch(result)
 
     @staticmethod
     def _try_to_get_next_page_link(soup: BeautifulSoup) -> str | None:

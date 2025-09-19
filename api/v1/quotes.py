@@ -9,7 +9,7 @@ from application.dto.response import QuotesFromDBResponseDTO
 from infrastructure.constants import QUOTES_PARSING_REQUEST_LIMIT
 from infrastructure.fastapi_cfg import limiter
 
-router = APIRouter(prefix="")
+router = APIRouter(prefix='')
 
 
 @router.get('/quotes')

@@ -12,6 +12,7 @@ class Quote:
         tags (list[str]): The tags of the quote
         parsed_at (datetime): The date and time the quote was parsed
     """
+
     author: str
     text: str
     tags: list[str]
